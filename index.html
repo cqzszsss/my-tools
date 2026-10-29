@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我的工具</title>
+<meta name="description" content="打卡、健身、存钱、穿搭尺码，一个页面全部搞定">
+<meta name="theme-color" content="#F4F4F2">
+<meta name="color-scheme" content="light">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="我的工具">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apps/checkin/icons/apple-touch-icon.png">
+<link rel="icon" href="./apps/checkin/icons/icon-192.png">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #F4F4F2;
+    --card: #FFFFFF;
+    --ink: #111111;
+    --sub: #93938D;
+    --faint: #A8A8A1;
+    --line: rgba(17, 17, 17, .05);
+    --amber: #E0A84E;
+  }
+
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC",
+      "Helvetica Neue", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    overscroll-behavior-y: contain;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  }
+
+  .wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+  }
+
+  .date {
+    font-size: 12px;
+    color: #9C9C95;
+    letter-spacing: .06em;
+  }
+
+  h1 {
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -.9px;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+
+  .tagline {
+    font-size: 13px;
+    color: #9C9C95;
+    margin-top: 8px;
+    letter-spacing: .01em;
+  }
+
+  /* 打卡入口 */
+  .hero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #111;
+    color: #fff;
+    border-radius: 26px;
+    padding: 20px;
+    margin: 24px 0 30px;
+    text-decoration: none;
+    transition: transform .18s ease;
+  }
+
+  .hero:active { transform: scale(.985); }
+
+  .hero-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .09);
+    color: var(--amber);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .hero-icon svg { width: 24px; height: 24px; }
+
+  .hero-body { flex: 1; min-width: 0; }
+
+  .hero-title {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  .hero-meta {
+    font-size: 12px;
+    color: #A3A39D;
+    margin-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bar {
+    height: 4px;
+    background: rgba(255, 255, 255, .13);
+    border-radius: 99px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .bar i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--amber);
+    border-radius: 99px;
+    transition: width .45s cubic-bezier(.22, 1, .36, 1);
+  }
+
+  .hero-arrow {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .09);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+
+  .hero-arrow svg { width: 17px; height: 17px; }
+
+  /* 分区 */
+  .section { margin-top: 26px; }
+  .section:first-of-type { margin-top: 0; }
+
+  .label {
+    font-size: 12px;
+    color: #9C9C95;
+    letter-spacing: .08em;
+    margin: 0 2px 12px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .18s ease;
+  }
+
+  .row:last-child { margin-bottom: 0; }
+  .row:active { transform: scale(.985); }
+
+  .row .icon {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    flex: none;
+  }
+
+  .row-body { flex: 1; min-width: 0; }
+
+  .row-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  .row-desc {
+    font-size: 12px;
+    color: var(--sub);
+    margin-top: 3px;
+  }
+
+  .chev { color: #C6C6C0; flex: none; }
+  .chev svg { width: 18px; height: 18px; display: block; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    min-height: 134px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 17px 16px 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .18s ease;
+  }
+
+  .card:active { transform: scale(.975); }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+    background: var(--tint);
+    color: var(--accent);
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+    flex: none;
+  }
+
+  .icon svg { width: 21px; height: 21px; }
+
+  .card-title {
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+
+  .card-desc {
+    font-size: 12px;
+    color: var(--sub);
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+
+  .note {
+    font-size: 11.5px;
+    color: var(--faint);
+    text-align: center;
+    line-height: 1.7;
+    margin-top: 30px;
+  }
+
+  a:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 340px) {
+    .wrap { padding-left: 16px; padding-right: 16px; }
+    h1 { font-size: 27px; }
+    .card { min-height: 128px; padding: 15px 14px 14px; }
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="date" id="todayLabel"></div>
+      <h1>我的工具</h1>
+      <p class="tagline">打卡 · 健身 · 生活</p>
+    </header>
+
+    <a class="hero" href="./apps/checkin/" aria-label="打开每日打卡">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+      </div>
+      <div class="hero-body">
+        <div class="hero-title">每日打卡</div>
+        <div class="hero-meta" id="checkinMeta">正在读取记录…</div>
+        <div class="bar"><i id="barFill"></i></div>
+      </div>
+      <div class="hero-arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 6l6 6-6 6"></path>
+        </svg>
+      </div>
+    </a>
+
+    <section class="section">
+      <div class="label">健身与体态</div>
+
+      <a class="row" href="./apps/posture-5-2.html">
+        <div class="icon" style="--accent:#3D8BFD;--tint:#EDF3FF" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12h4l2-7 4 14 2-7h6"></path>
+          </svg>
+        </div>
+        <div class="row-body">
+          <div class="row-title">体态矫正 · 5 练 2 休</div>
+          <div class="row-desc">徒手跟练 · 增肌减脂</div>
+        </div>
+        <div class="chev" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6l6 6-6 6"></path>
+          </svg>
+        </div>
+      </a>
+
+      <a class="row" href="./apps/workout-4days.html">
+        <div class="icon" style="--accent:#E8863A;--tint:#FDF2EA" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"></path>
+          </svg>
+        </div>
+        <div class="row-body">
+          <div class="row-title">新手健身 · 4 练计划</div>
+          <div class="row-desc">每周四练 · 徒手入门</div>
+        </div>
+        <div class="chev" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6l6 6-6 6"></path>
+          </svg>
+        </div>
+      </a>
+
+      <a class="row" href="./apps/posture-2day.html">
+        <div class="icon" style="--accent:#6D4EDB;--tint:#F1EDFC" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 2l4 4-4 4"></path>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <path d="M7 22l-4-4 4-4"></path>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+        </div>
+        <div class="row-body">
+          <div class="row-title">体态矫正 · 两天循环</div>
+          <div class="row-desc">两天一轮 · 跟练更轻松</div>
+        </div>
+        <div class="chev" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6l6 6-6 6"></path>
+          </svg>
+        </div>
+      </a>
+    </section>
+
+    <section class="section">
+      <div class="label">生活</div>
+      <div class="grid">
+        <a class="card" href="./apps/savings.html">
+          <div class="icon" style="--accent:#B08A3E;--tint:#F6F1E6" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 7H5a2 2 0 0 1 0-4h13v4"></path>
+              <path d="M3 5v14a2 2 0 0 0 2 2h15V7H5a2 2 0 0 0-2 2z"></path>
+              <path d="M16 13h.01"></path>
+            </svg>
+          </div>
+          <div class="card-title">光波存钱计划</div>
+          <div class="card-desc">按发薪周期管理每日额度</div>
+        </a>
+
+        <a class="card" href="./apps/size-book.html">
+          <div class="icon" style="--accent:#D94A7A;--tint:#FCEDF2" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.3 8.7 15.3 2.7 2.7 15.3l6 6L21.3 8.7Z"></path>
+              <path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2"></path>
+            </svg>
+          </div>
+          <div class="card-title">穿搭尺码本</div>
+          <div class="card-desc">记好尺码，买衣服不踩坑</div>
+        </a>
+      </div>
+    </section>
+
+    <p class="note">数据只保存在本机浏览器<br>清除浏览器数据会一并清除</p>
+  </main>
+
+  <script>
+    (function () {
+      var DAY_START_HOUR = 4
+      var WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六']
+
+      function pad2(n) {
+        return n < 10 ? '0' + n : String(n)
+      }
+
+      function formatDate(d) {
+        return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate())
+      }
+
+      function todayStr() {
+        var d = new Date()
+        if (d.getHours() < DAY_START_HOUR) d.setDate(d.getDate() - 1)
+        return d
+      }
+
+      function parseDate(str) {
+        var p = String(str).split('-')
+        return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]))
+      }
+
+      function addDays(str, n) {
+        var d = parseDate(str)
+        d.setDate(d.getDate() + n)
+        return formatDate(d)
+      }
+
+      function diffDays(from, to) {
+        return Math.round((parseDate(to).getTime() - parseDate(from).getTime()) / 86400000)
+      }
+
+      function weekdayIndex(str) {
+        return parseDate(str).getDay()
+      }
+
+      function readList(key) {
+        try {
+          var raw = localStorage.getItem(key)
+          var value = raw ? JSON.parse(raw) : []
+          return Array.isArray(value) ? value : []
+        } catch (e) {
+          return []
+        }
+      }
+
+      function isDue(habit, date) {
+        if (!habit || habit.archived) return false
+        if (habit.startDate && date < habit.startDate) return false
+        var freq = habit.freq || { type: 'daily' }
+        if (freq.type === 'weekdays') {
+          return (freq.weekdays || []).indexOf(weekdayIndex(date)) >= 0
+        }
+        if (freq.type === 'interval') {
+          var n = Math.max(2, Number(freq.intervalDays) || 2)
+          var start = habit.startDate || date
+          return diffDays(start, date) % n === 0
+        }
+        return freq.type === 'daily'
+      }
+
+      function keyOf(habitId, date) {
+        return habitId + '|' + date
+      }
+
+      function getStats() {
+        var date = formatDate(todayStr())
+        var habits = readList('checkin.habits.v1').filter(function (h) {
+          return !h.archived
+        })
+        var checkins = readList('checkin.checkins.v1')
+        var doneSet = {}
+        checkins.forEach(function (c) {
+          if (c && c.habitId && c.date) doneSet[keyOf(c.habitId, c.date)] = true
+        })
+
+        var required = habits.filter(function (h) {
+          return h.priority === 0 && isDue(h, date)
+        })
+        var done = required.filter(function (h) {
+          return doneSet[keyOf(h.id, date)]
+        }).length
+
+        var streak = 0
+        var hasRequired = habits.some(function (h) {
+          return h.priority === 0
+        })
+        if (hasRequired) {
+          var earliest = null
+          habits.forEach(function (h) {
+            if (h.startDate && (earliest === null || h.startDate < earliest)) earliest = h.startDate
+          })
+          var cursor = date
+          var todayDone = required.length > 0 && required.every(function (h) {
+            return doneSet[keyOf(h.id, date)]
+          })
+          if (!todayDone) cursor = addDays(cursor, -1)
+          for (var i = 0; i < 3650; i++) {
+            if (earliest && cursor < earliest) break
+            var due = habits.filter(function (h) {
+              return h.priority === 0 && isDue(h, cursor)
+            })
+            if (due.length) {
+              var allDone = due.every(function (h) {
+                return doneSet[keyOf(h.id, cursor)]
+              })
+              if (!allDone) break
+              streak += 1
+            }
+            cursor = addDays(cursor, -1)
+          }
+        }
+
+        return {
+          date: date,
+          total: habits.length,
+          requiredTotal: required.length,
+          done: done,
+          streak: streak
+        }
+      }
+
+      function render() {
+        var label = document.getElementById('todayLabel')
+        var meta = document.getElementById('checkinMeta')
+        var fill = document.getElementById('barFill')
+        if (!label || !meta || !fill) return
+
+        var stats = getStats()
+        var parts = stats.date.split('-')
+        var weekday = WEEKDAYS[weekdayIndex(stats.date)]
+        label.textContent = Number(parts[1]) + '月' + Number(parts[2]) + '日 周' + weekday
+
+        if (!stats.total) {
+          meta.textContent = '还没有习惯，点这里开始'
+          fill.style.width = '0%'
+          return
+        }
+
+        if (!stats.requiredTotal) {
+          meta.textContent = '今天没有必做习惯 · 连续 ' + stats.streak + ' 天'
+          fill.style.width = '0%'
+          return
+        }
+
+        var percent = Math.round(stats.done / stats.requiredTotal * 100)
+        fill.style.width = percent + '%'
+
+        if (stats.done >= stats.requiredTotal) {
+          meta.textContent = '今日已达标 · 连续 ' + stats.streak + ' 天'
+        } else {
+          meta.textContent = '今日必做 ' + stats.done + '/' + stats.requiredTotal +
+            ' · 连续 ' + stats.streak + ' 天'
+        }
+      }
+
+      render()
+
+      // 从打卡页返回时刷新
+      window.addEventListener('pageshow', render)
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) render()
+      })
+      window.addEventListener('storage', render)
+
+      if ('serviceWorker' in navigator &&
+        (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {})
+        })
+      }
+    })()
+  </script>
+</body>
+</html>

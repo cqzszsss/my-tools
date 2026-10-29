@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>打卡 · 每日必做</title>
+  <meta name="description" content="轻量个人打卡记录，数据只保存在本机，可离线使用">
+  <meta name="theme-color" content="#F4F4F2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="打卡">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <div class="app">
+    <main class="main" id="main">
+      <section class="view" id="view-today"></section>
+      <section class="view" id="view-habits"></section>
+      <section class="view" id="view-stats"></section>
+      <section class="view" id="view-edit"></section>
+    </main>
+
+    <nav class="tabbar" id="tabbar">
+      <div class="tabbar-inner">
+        <button class="tab" data-action="tab" data-tab="today">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M8.4 12.3l2.5 2.5 4.7-5"></path>
+          </svg>
+          <span>今日</span>
+        </button>
+        <button class="tab" data-action="tab" data-tab="habits">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 6h11M9 12h11M9 18h11"></path>
+            <circle cx="4.4" cy="6" r="1.1" fill="currentColor" stroke="none"></circle>
+            <circle cx="4.4" cy="12" r="1.1" fill="currentColor" stroke="none"></circle>
+            <circle cx="4.4" cy="18" r="1.1" fill="currentColor" stroke="none"></circle>
+          </svg>
+          <span>习惯</span>
+        </button>
+        <button class="tab" data-action="tab" data-tab="stats">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20h16"></path>
+            <path d="M7 20v-6M12 20V6M17 20v-9"></path>
+          </svg>
+          <span>统计</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal" id="modal" hidden></div>
+
+  <script src="./js/config.js"></script>
+  <script src="./js/date.js"></script>
+  <script src="./js/habit.js"></script>
+  <script src="./js/store.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/sync.js"></script>
+</body>
+</html>
